@@ -1,4 +1,7 @@
-use game::game_loop::{init_game, update_game};
+use game::{
+    enemies::create_enemies,
+    game_loop::{draw_game, init_game, update_game},
+};
 use macroquad::prelude::*;
 pub mod game;
 
@@ -27,7 +30,7 @@ async fn main() {
         // draw stuff
         clear_background(BLACK);
 
-        game.player.draw();
+        draw_game(&mut game);
 
         let fps = get_fps();
         draw_text(format!("{fps}").as_str(), 20., 50., 36., ORANGE);

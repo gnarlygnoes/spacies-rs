@@ -1,18 +1,20 @@
 use macroquad::color::ORANGE;
 
-use super::player::{create_player, update_player, Player};
+use super::{
+    enemies::{create_enemies, draw_enemes, Enemy},
+    player::{create_player, update_player, Player},
+};
 
 pub struct Game {
     pub player: Player,
-    // enemies: Vec<Enemy>,
+    enemies: Vec<Vec<Enemy>>,
 }
 
 pub fn init_game() -> Game {
-    // player = create_player(ORANGE);
     let g = Game {
         player: create_player(ORANGE),
+        enemies: create_enemies(),
     };
-    // let mut player: Player = create_player(ORANGE);
 
     return g;
 }
@@ -23,4 +25,5 @@ pub fn update_game(g: &mut Game, dt: f32) {
 
 pub fn draw_game(g: &mut Game) {
     g.player.draw();
+    draw_enemes(&g.enemies);
 }
