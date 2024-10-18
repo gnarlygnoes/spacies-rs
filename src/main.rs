@@ -1,4 +1,4 @@
-use game::player::Player;
+use game::game_loop::{init_game, update_game};
 use macroquad::prelude::*;
 pub mod game;
 
@@ -16,23 +16,21 @@ fn window_conf() -> Conf {
 
 #[macroquad::main(window_conf)]
 async fn main() {
-    let mut pos_x = 200.;
-    let mut player = Player {
-        rec: Rect {
-            x: (WINDOW_WIDTH) / 2. - 25.,
-            y: (WINDOW_HEIGHT) - 100.,
-            w: 50.,
-            h: 80.,
-        },
-        colour: ORANGE,
-    };
+    let mut game = init_game();
 
     loop {
+        let dt = get_frame_time();
+
+        // update stuff
+        update_game(&mut game, dt);
+
         // draw stuff
         clear_background(BLACK);
 
-        player.draw();
+        game.player.draw();
 
+        let fps = get_fps();
+        draw_text(format!("{fps}").as_str(), 20., 50., 36., ORANGE);
         next_frame().await
     }
 }
