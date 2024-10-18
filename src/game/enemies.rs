@@ -1,5 +1,3 @@
-use std::alloc::GlobalAlloc;
-
 use macroquad::{
     color::{Color, RED},
     math::Rect,
@@ -43,28 +41,16 @@ pub fn create_enemies() -> Vec<Vec<Enemy>> {
             },
             colour: RED,
         }]);
-        // enemies.push(vec![Enemy {
-        //     rec: Rect {
-        //         x: 10.,
-        //         y: 10.,
-        //         w: 40.,
-        //         h: 60.,
-        //     },
-        //     colour: RED,
-        // }]);
         for j in 0..10 {
             enemies[i].push(Enemy {
                 rec: Rect {
                     x: (1.5 * j as f32 * w) + 10.,
                     y: (1.5 * i as f32 * h) + 10.,
-                    w: w,
-                    h: h,
+                    w,
+                    h,
                 },
-                colour: RED,
+                ..Default::default()
             });
-            // enemies[i][j].rec.x = (1.5 * j as f32 * enemies[i][j].rec.w) + 10.;
-            // enemies[i][j].rec.y = (1.5 * i as f32 * enemies[i][j].rec.h) + 10.;
-            // println!("{j}");
         }
     }
     println!("{}", enemies[0].len());

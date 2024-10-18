@@ -1,7 +1,4 @@
-use game::{
-    enemies::create_enemies,
-    game_loop::{draw_game, init_game, update_game},
-};
+use game::game_loop::{draw_game, init_game, update_game};
 use macroquad::prelude::*;
 pub mod game;
 
