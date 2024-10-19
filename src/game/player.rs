@@ -10,6 +10,7 @@ use crate::WINDOW_WIDTH;
 pub struct Player {
     pub rec: Rect,
     pub colour: Color,
+    // pub weapon: Weapon,
 }
 impl Player {
     pub fn draw(&self) {

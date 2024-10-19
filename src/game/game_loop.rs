@@ -11,12 +11,10 @@ pub struct Game {
 }
 
 pub fn init_game() -> Game {
-    let g = Game {
+    Game {
         player: create_player(ORANGE),
         enemies: create_enemies(),
-    };
-
-    return g;
+    }
 }
 
 pub fn update_game(g: &mut Game, dt: f32) {
