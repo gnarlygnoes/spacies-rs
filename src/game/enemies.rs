@@ -53,7 +53,7 @@ pub fn create_enemies() -> Vec<Vec<Enemy>> {
             });
         }
     }
-    println!("{}", enemies[0].len());
+    // println!("{}", enemies[0].len());
     return enemies;
 }
 

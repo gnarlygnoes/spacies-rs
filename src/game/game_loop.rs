@@ -1,4 +1,4 @@
-use macroquad::color::ORANGE;
+use macroquad::{color::ORANGE, shapes::draw_rectangle};
 
 use super::{
     enemies::{create_enemies, draw_enemes, Enemy},
@@ -24,4 +24,12 @@ pub fn update_game(g: &mut Game, dt: f32) {
 pub fn draw_game(g: &mut Game) {
     g.player.draw();
     draw_enemes(&g.enemies);
+
+    if g.player.weapon.muzzle_active {
+        g.player.weapon.draw_muzzle();
+    }
+
+    for b in &g.player.weapon.bullet {
+        b.draw_bullet();
+    }
 }
