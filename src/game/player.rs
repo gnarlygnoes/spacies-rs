@@ -1,16 +1,18 @@
 use macroquad::{
     color::Color,
     input::{is_key_down, KeyCode},
-    math::Rect,
+    math::{Rect, Vec2},
     shapes::draw_rectangle,
 };
 
 use crate::WINDOW_WIDTH;
 
+use super::weapon::{update_weapon, Weapon};
+
 pub struct Player {
     pub rec: Rect,
     pub colour: Color,
-    // pub weapon: Weapon,
+    pub weapon: Weapon,
 }
 impl Player {
     pub fn draw(&self) {
@@ -36,14 +38,23 @@ impl Player {
 }
 
 pub fn create_player(colour: Color) -> Player {
+    let x = (crate::WINDOW_WIDTH) / 2. - 25.;
+    let y = (crate::WINDOW_HEIGHT) - 100.;
+    let w = 50.;
+    let h = 80.;
     return Player {
         rec: Rect {
-            x: (crate::WINDOW_WIDTH) / 2. - 25.,
-            y: (crate::WINDOW_HEIGHT) - 100.,
+            x,
+            y,
             w: 50.,
             h: 80.,
         },
         colour,
+        weapon: Weapon {
+            pos: Vec2 { x: x + w / 2., y },
+            weapon_lock: false,
+            shooting: false,
+        },
     };
 }
 
@@ -54,4 +65,5 @@ pub fn update_player(p: &mut Player, dt: f32) {
     if is_key_down(KeyCode::Right) {
         p.move_player(1, dt);
     }
+    update_weapon(&mut p.weapon, dt);
 }
