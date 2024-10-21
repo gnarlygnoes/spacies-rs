@@ -7,13 +7,15 @@ use macroquad::{
     shapes::{draw_circle, draw_rectangle},
 };
 
+use super::{collision::check_collision, enemies::Enemy};
+
 pub struct Weapon {
     pub pos: Vec2,
     pub weapon_lock: bool,
     pub shooting: bool,
     pub cur_time: f32,
     // pub bullets: Vec<Bullet>,
-    pub bullets2: HashMap<u32, Bullet>,
+    pub bullets: HashMap<u32, Bullet>,
     pub reload_time: f32,
     pub muzzle: Circle,
     pub muzzle_active: bool,
@@ -45,7 +47,7 @@ impl Weapon {
             //     },
             //     // active: true,
             // });
-            self.bullets2.insert(
+            self.bullets.insert(
                 self.bullet_id,
                 Bullet {
                     colour: GRAY,
@@ -70,19 +72,21 @@ impl Weapon {
 
         // let mut inactive: Vec<u32>::new();
         let mut inactive: Vec<u32> = vec![];
-        for (id, b) in &mut self.bullets2 {
+        for (id, b) in &mut self.bullets {
             b.update_bullet(dt);
             if b.rec.y < -100. {
                 b.active = false;
+            }
+            if !b.active {
                 inactive.push(*id);
             }
         }
-        self.bullets2 = delete_bullet(self.bullets2.clone(), inactive);
+        self.bullets = delete_bullets(self.bullets.clone(), inactive);
 
         println!(
             "Length of Bullets hashmap: {}. Its capacity: {}.",
-            self.bullets2.len(),
-            self.bullets2.capacity()
+            self.bullets.len(),
+            self.bullets.capacity()
         );
     }
 
@@ -101,9 +105,9 @@ impl Weapon {
 // fn shoot_spark(pos: Vec2, dt: f32) {}
 #[derive(Clone)]
 pub struct Bullet {
-    colour: Color,
-    rec: Rect,
-    active: bool,
+    pub colour: Color,
+    pub rec: Rect,
+    pub active: bool,
 }
 impl Default for Bullet {
     fn default() -> Self {
@@ -127,9 +131,20 @@ impl Bullet {
     pub fn draw_bullet(&self) {
         draw_rectangle(self.rec.x, self.rec.y, self.rec.w, self.rec.h, self.colour);
     }
+
+    pub fn bullet_collision(&mut self, enemies: Vec<Vec<Enemy>>) {
+        for i in enemies {
+            for e in i {
+                if check_collision(self.rec, e.rec) {
+                    self.active = false;
+                    println!("BANG!");
+                }
+            }
+        }
+    }
 }
 
-pub fn delete_bullet(mut b: HashMap<u32, Bullet>, i: Vec<u32>) -> HashMap<u32, Bullet> {
+pub fn delete_bullets(mut b: HashMap<u32, Bullet>, i: Vec<u32>) -> HashMap<u32, Bullet> {
     for id in i {
         b.remove(&id);
     }

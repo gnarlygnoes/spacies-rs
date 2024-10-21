@@ -9,7 +9,7 @@ use macroquad::{
 
 use crate::WINDOW_WIDTH;
 
-use super::weapon::{Bullet, Weapon};
+use super::weapon::Weapon;
 
 pub struct Player {
     pub rec: Rect,
@@ -54,7 +54,7 @@ pub fn create_player(colour: Color) -> Player {
             shooting: false,
             cur_time: 0.,
             // bullets: vec![Bullet::default(); 0],
-            bullets2: HashMap::new(),
+            bullets: HashMap::new(),
             reload_time: 0.2,
             muzzle: Circle {
                 x: 0.,
