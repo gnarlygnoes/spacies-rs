@@ -6,13 +6,11 @@ use macroquad::{
 };
 
 pub struct Weapon {
-    // Shooter that fires a bullet
-    // bullets: Vec<Bullet>,
     pub pos: Vec2,
     pub weapon_lock: bool,
     pub shooting: bool,
     pub cur_time: f32,
-    pub bullet: Vec<Bullet>,
+    pub bullets: Vec<Bullet>,
     pub reload_time: f32,
     pub muzzle: Circle,
     pub muzzle_active: bool,
@@ -27,18 +25,18 @@ impl Weapon {
         if self.shooting {
             if self.cur_time < self.reload_time {
                 self.muzzle = self.init_muzzle(self.cur_time);
-                self.cur_time += dt;
+                // self.cur_time += dt;
             }
             self.cur_time += dt;
         }
         if self.cur_time > self.reload_time / 2. && self.weapon_lock {
-            // bullet.create_bullet();
-            self.bullet.push(Bullet {
+            let w = 5.;
+            self.bullets.push(Bullet {
                 colour: GRAY,
                 rec: Rect {
-                    x: self.pos.x,
+                    x: self.pos.x - w / 2.,
                     y: self.pos.y,
-                    w: 5.,
+                    w,
                     h: 20.,
                 },
                 // active: true,
@@ -52,7 +50,7 @@ impl Weapon {
             self.cur_time = 0.;
         }
 
-        for b in &mut self.bullet {
+        for b in &mut self.bullets {
             b.update_bullet(dt);
         }
     }
@@ -61,7 +59,7 @@ impl Weapon {
         Circle {
             x: self.pos.x,
             y: self.pos.y,
-            r: 10. * time,
+            r: 20. * time,
         }
     }
     pub fn draw_muzzle(&self) {
@@ -99,11 +97,3 @@ impl Bullet {
         draw_rectangle(self.rec.x, self.rec.y, self.rec.w, self.rec.h, self.colour);
     }
 }
-
-// pub fn create_weapon(pos: Vec2) -> Weapon {
-//     Weapon { pos }
-// }
-
-// fn set_time() -> f32 {
-//     return 0.;
-// }

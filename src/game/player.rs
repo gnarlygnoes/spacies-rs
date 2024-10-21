@@ -52,8 +52,8 @@ pub fn create_player(colour: Color) -> Player {
             weapon_lock: false,
             shooting: false,
             cur_time: 0.,
-            bullet: vec![Bullet::default(); 0],
-            reload_time: 0.5,
+            bullets: vec![Bullet::default(); 0],
+            reload_time: 0.2,
             muzzle: Circle {
                 x: 0.,
                 y: 0.,
