@@ -65,16 +65,16 @@ impl Enemy {
 // }
 
 pub fn create_enemies() -> HashMap<u8, Enemy> {
-    let w = 40.;
-    let h = 60.;
+    let w = 45.;
+    let h = 80.;
     let mut enemies = HashMap::new();
     for i in 0..50 {
         enemies.insert(
             i,
             Enemy {
                 rec: Rect {
-                    x: 10.,
-                    y: 10.,
+                    x: 1.5 * (i % 10) as f32 * w + 10.,
+                    y: 1.5 * (i / 10) as f32 * h + 10.,
                     w,
                     h,
                 },

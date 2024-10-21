@@ -55,7 +55,7 @@ pub fn create_player(colour: Color) -> Player {
             cur_time: 0.,
             // bullets: vec![Bullet::default(); 0],
             bullets: HashMap::new(),
-            reload_time: 0.2,
+            reload_time: 0.8,
             muzzle: Circle {
                 x: 0.,
                 y: 0.,

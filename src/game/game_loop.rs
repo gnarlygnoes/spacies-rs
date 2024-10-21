@@ -12,6 +12,7 @@ pub struct Game {
     pub player: Player,
     // pub enemies: Vec<Vec<Enemy>>,
     pub enemies: HashMap<u8, Enemy>,
+    // pub defences: HashMap(<u8, Defence>)
 }
 impl Game {
     pub fn update_enemies(&mut self) {
