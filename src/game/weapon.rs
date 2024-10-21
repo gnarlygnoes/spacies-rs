@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use macroquad::{
     color::{Color, GRAY, YELLOW},
     input::{is_key_pressed, KeyCode},
@@ -10,10 +12,12 @@ pub struct Weapon {
     pub weapon_lock: bool,
     pub shooting: bool,
     pub cur_time: f32,
-    pub bullets: Vec<Bullet>,
+    // pub bullets: Vec<Bullet>,
+    pub bullets2: HashMap<u32, Bullet>,
     pub reload_time: f32,
     pub muzzle: Circle,
     pub muzzle_active: bool,
+    pub bullet_id: u32,
 }
 impl Weapon {
     pub fn update_weapon(&mut self, dt: f32) {
@@ -31,16 +35,30 @@ impl Weapon {
         }
         if self.cur_time > self.reload_time / 2. && self.weapon_lock {
             let w = 5.;
-            self.bullets.push(Bullet {
-                colour: GRAY,
-                rec: Rect {
-                    x: self.pos.x - w / 2.,
-                    y: self.pos.y,
-                    w,
-                    h: 20.,
+            // self.bullets.push(Bullet {
+            //     colour: GRAY,
+            //     rec: Rect {
+            //         x: self.pos.x - w / 2.,
+            //         y: self.pos.y,
+            //         w,
+            //         h: 20.,
+            //     },
+            //     // active: true,
+            // });
+            self.bullets2.insert(
+                self.bullet_id,
+                Bullet {
+                    colour: GRAY,
+                    rec: Rect {
+                        x: self.pos.x - w / 2.,
+                        y: self.pos.y,
+                        w,
+                        h: 20.,
+                    },
+                    active: true,
                 },
-                // active: true,
-            });
+            );
+            self.bullet_id += 1;
             self.weapon_lock = false
         }
         if self.cur_time >= self.reload_time {
@@ -50,9 +68,22 @@ impl Weapon {
             self.cur_time = 0.;
         }
 
-        for b in &mut self.bullets {
+        // let mut inactive: Vec<u32>::new();
+        let mut inactive: Vec<u32> = vec![];
+        for (id, b) in &mut self.bullets2 {
             b.update_bullet(dt);
+            if b.rec.y < -100. {
+                b.active = false;
+                inactive.push(*id);
+            }
         }
+        self.bullets2 = delete_bullet(self.bullets2.clone(), inactive);
+
+        println!(
+            "Length of Bullets hashmap: {}. Its capacity: {}.",
+            self.bullets2.len(),
+            self.bullets2.capacity()
+        );
     }
 
     fn init_muzzle(&self, time: f32) -> Circle {
@@ -72,7 +103,7 @@ impl Weapon {
 pub struct Bullet {
     colour: Color,
     rec: Rect,
-    // active: bool,
+    active: bool,
 }
 impl Default for Bullet {
     fn default() -> Self {
@@ -84,7 +115,7 @@ impl Default for Bullet {
                 w: 0.,
                 h: 0.,
             },
-            // active: false,
+            active: false,
         }
     }
 }
@@ -96,4 +127,11 @@ impl Bullet {
     pub fn draw_bullet(&self) {
         draw_rectangle(self.rec.x, self.rec.y, self.rec.w, self.rec.h, self.colour);
     }
+}
+
+pub fn delete_bullet(mut b: HashMap<u32, Bullet>, i: Vec<u32>) -> HashMap<u32, Bullet> {
+    for id in i {
+        b.remove(&id);
+    }
+    return b;
 }

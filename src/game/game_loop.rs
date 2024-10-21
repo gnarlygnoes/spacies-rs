@@ -28,7 +28,7 @@ pub fn draw_game(g: &mut Game) {
     g.player.draw();
     draw_enemes(&g.enemies);
 
-    for b in &g.player.weapon.bullets {
+    for (_, b) in &g.player.weapon.bullets2 {
         b.draw_bullet();
     }
 }

@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use macroquad::{
     color::Color,
     input::{is_key_down, KeyCode},
@@ -20,7 +22,6 @@ impl Player {
     }
 
     pub fn move_player(&mut self, direction: i8, delta_time: f32) {
-        // if is_key_down(macroquad::input::KeyCode::A) {
         if direction < 0 && self.rec.x > 0. {
             self.rec.x -= 1000. * delta_time;
         }
@@ -52,7 +53,8 @@ pub fn create_player(colour: Color) -> Player {
             weapon_lock: false,
             shooting: false,
             cur_time: 0.,
-            bullets: vec![Bullet::default(); 0],
+            // bullets: vec![Bullet::default(); 0],
+            bullets2: HashMap::new(),
             reload_time: 0.2,
             muzzle: Circle {
                 x: 0.,
@@ -60,6 +62,7 @@ pub fn create_player(colour: Color) -> Player {
                 r: 0.,
             },
             muzzle_active: false,
+            bullet_id: 0,
         },
     };
 }
