@@ -13,14 +13,21 @@ pub fn check_collision(rec1: Rect, rec2: Rect) -> bool {
 
 pub fn update_collision(game: &mut Game) {
     for (_, b) in &mut game.player.weapon.bullets {
-        for (_, e) in &mut game.enemies {
-            // for e in i {
-            if check_collision(b.rec, e.rec) {
-                b.active = false;
-                e.alive = false;
+        for row in &mut game.enemies {
+            for e in row {
+                if e.alive {
+                    let bullet_rec = Rect {
+                        x: b.circle.x,
+                        y: b.circle.y,
+                        w: b.circle.r,
+                        h: b.circle.r,
+                    };
+                    if check_collision(bullet_rec, e.rec) {
+                        b.active = false;
+                        e.alive = false;
+                    }
+                }
             }
-            // }
         }
-        // if check_collision(b, )
     }
 }

@@ -23,10 +23,10 @@ impl Player {
 
     pub fn move_player(&mut self, direction: i8, delta_time: f32) {
         if direction < 0 && self.rec.x > 0. {
-            self.rec.x -= 1000. * delta_time;
+            self.rec.x -= 700. * delta_time;
         }
         if direction > 0 && self.rec.x + self.rec.w < WINDOW_WIDTH {
-            self.rec.x += 1000. * delta_time
+            self.rec.x += 700. * delta_time
         }
         self.weapon.pos.x = self.rec.x + self.rec.w / 2.;
         self.weapon.pos.y = self.rec.y;
@@ -55,7 +55,7 @@ pub fn create_player(colour: Color) -> Player {
             cur_time: 0.,
             // bullets: vec![Bullet::default(); 0],
             bullets: HashMap::new(),
-            reload_time: 0.8,
+            reload_time: 0.4,
             muzzle: Circle {
                 x: 0.,
                 y: 0.,
