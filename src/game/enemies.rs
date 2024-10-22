@@ -9,7 +9,7 @@ use macroquad::{
     shapes::{draw_circle, draw_rectangle},
 };
 
-use crate::WINDOW_WIDTH;
+use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
 
 use super::{game_loop::Game, weapon::Bullet};
 
@@ -19,7 +19,7 @@ pub struct Enemy {
     pub colour: Color,
     pub alive: bool,
     can_shoot: bool,
-    bullet: Bullet,
+    pub bullet: Bullet,
     // bullet_id: u32,
 }
 impl Default for Enemy {
@@ -44,6 +44,14 @@ impl Default for Enemy {
 impl Enemy {
     pub fn draw_enemy(&self) {
         draw_rectangle(self.rec.x, self.rec.y, self.rec.w, self.rec.h, self.colour);
+        if self.bullet.active {
+            draw_circle(
+                self.bullet.circle.x,
+                self.bullet.circle.y,
+                self.bullet.circle.r,
+                self.colour,
+            );
+        }
     }
 }
 impl Game {
@@ -108,7 +116,7 @@ impl Game {
             for j in 0..c {
                 for k in 1..r + 1 {
                     if self.enemies[r - k][j].alive {
-                        self.enemies[r - k][j].colour = GREEN;
+                        // self.enemies[r - k][j].colour = GREEN;
                         self.enemies[r - k][j].can_shoot = true;
                         break;
                     }
@@ -158,20 +166,9 @@ impl Game {
             for e in row {
                 if e.bullet.active {
                     e.bullet.circle.y += 1000. * dt;
-                }
-            }
-        }
-    }
-    pub fn draw_enemy_bullets(&self) {
-        for row in &self.enemies {
-            for e in row {
-                if e.bullet.active {
-                    draw_circle(
-                        e.bullet.circle.x,
-                        e.bullet.circle.y,
-                        e.bullet.circle.r,
-                        e.bullet.colour,
-                    );
+                    if e.bullet.circle.y > WINDOW_HEIGHT {
+                        e.bullet.active = false;
+                    }
                 }
             }
         }
