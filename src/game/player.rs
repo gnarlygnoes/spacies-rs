@@ -1,11 +1,10 @@
 use std::collections::HashMap;
 
 use macroquad::{
-    color::{Color, ORANGE, WHITE},
+    color::{Color, ORANGE},
     input::{is_key_down, KeyCode},
     math::{Circle, Rect, Vec2},
     shapes::draw_rectangle,
-    texture::{draw_texture, draw_texture_ex, Texture2D},
 };
 
 use crate::WINDOW_WIDTH;

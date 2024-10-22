@@ -1,11 +1,8 @@
-use std::collections::HashMap;
-
 use ::rand::Rng;
 
 use macroquad::{
-    color::{Color, GREEN, RED, WHITE},
+    color::{Color, GREEN, RED},
     math::{Circle, Rect},
-    rand::gen_range,
     shapes::{draw_circle, draw_rectangle},
 };
 
@@ -165,7 +162,7 @@ impl Game {
         for row in &mut self.enemies {
             for e in row {
                 if e.bullet.active {
-                    e.bullet.circle.y += 1000. * dt;
+                    e.bullet.circle.y += 100. * dt;
                     if e.bullet.circle.y > WINDOW_HEIGHT {
                         e.bullet.active = false;
                     }

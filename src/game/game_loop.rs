@@ -1,13 +1,11 @@
 use std::collections::HashMap;
 
-use ::rand::Rng;
-use macroquad::{color::ORANGE, texture::Texture2D};
-
 use super::{
     collision::update_collision,
     defence::{draw_defences, init_defences, Defence},
     enemies::{create_enemies, draw_enemes, Enemy},
     player::{create_player, update_player, Player},
+    weapon::Bullet,
 };
 
 pub struct Game {
@@ -21,6 +19,7 @@ pub struct Game {
     pub enemy_drop_proc: bool,
     pub cur_shoot_time: f32,
     pub enemy_shoot_timer: f32,
+    // pub enemy_bullets: HashMap<u16, Bullet>,
     pub defences: HashMap<u8, Defence>,
 }
 
@@ -33,6 +32,7 @@ pub fn init_game() -> Game {
         game_speed: 1.,
         enemy_direction: 1.,
         enemy_drop_proc: false,
+        // enemy_bullets: HashMap::new(),
         cur_shoot_time: 0.,
         enemy_shoot_timer: 2.,
         defences: init_defences(),
