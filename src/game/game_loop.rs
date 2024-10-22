@@ -8,15 +8,21 @@ use super::{
 
 pub struct Game {
     pub player: Player,
-    // pub enemies: Vec<Vec<Enemy>>,
-    pub enemies: [[Enemy; 10]; 5], // pub enemies: HashMap<u8, Enemy>,
+    pub enemies: [[Enemy; 10]; 5],
+    pub event_time: f32,
+    pub game_speed: f32,
+    pub enemy_direction: f32,
+    pub enemy_drop_proc: bool,
 }
 
 pub fn init_game() -> Game {
     Game {
         player: create_player(ORANGE),
-        // enemies: create_enemies(),
         enemies: create_enemies(),
+        event_time: 0.,
+        game_speed: 1.,
+        enemy_direction: 1.,
+        enemy_drop_proc: false,
     }
 }
 
@@ -25,10 +31,8 @@ pub fn init_game() -> Game {
 
 pub fn update_game(g: &mut Game, dt: f32) {
     update_player(&mut g.player, dt);
-    g.update_enemies();
-    // g.update_enemy_state();
+    g.update_enemies(dt);
     update_collision(g);
-    // for b in &mut g.player.weapon.bullets {}
 }
 
 pub fn draw_game(g: &mut Game) {

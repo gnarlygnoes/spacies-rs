@@ -2,7 +2,7 @@ use game::game_loop::{draw_game, init_game, update_game};
 use macroquad::prelude::*;
 pub mod game;
 
-const WINDOW_WIDTH: f32 = 800.;
+const WINDOW_WIDTH: f32 = 1000.;
 const WINDOW_HEIGHT: f32 = 1200.;
 
 fn window_conf() -> Conf {
