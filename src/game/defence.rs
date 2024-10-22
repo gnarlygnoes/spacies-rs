@@ -38,7 +38,7 @@ pub fn init_defences() -> HashMap<u8, Defence> {
                 rec: Rect {
                     // x: 50. + w * 1.5 * i as f32,
                     x: 50. + (WINDOW_WIDTH / 4.0) * i as f32,
-                    y: WINDOW_HEIGHT - 200.,
+                    y: WINDOW_HEIGHT - 220.,
                     w,
                     h,
                 },

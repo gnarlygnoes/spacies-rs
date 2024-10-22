@@ -53,7 +53,10 @@ impl Weapon {
             self.muzzle_active = false;
             self.cur_time = 0.;
         }
+        self.is_bullet_active(dt);
+    }
 
+    pub fn is_bullet_active(&mut self, dt: f32) {
         let mut inactive: Vec<u32> = vec![];
         for (id, b) in &mut self.bullets {
             b.update_bullet(dt);

@@ -19,7 +19,8 @@ pub struct Game {
     pub enemy_drop_proc: bool,
     pub cur_shoot_time: f32,
     pub enemy_shoot_timer: f32,
-    // pub enemy_bullets: HashMap<u16, Bullet>,
+    pub enemy_bullets: HashMap<u32, Bullet>,
+    pub e_bullet_id: u32,
     pub defences: HashMap<u8, Defence>,
 }
 
@@ -32,7 +33,8 @@ pub fn init_game() -> Game {
         game_speed: 1.,
         enemy_direction: 1.,
         enemy_drop_proc: false,
-        // enemy_bullets: HashMap::new(),
+        enemy_bullets: HashMap::new(),
+        e_bullet_id: 0,
         cur_shoot_time: 0.,
         enemy_shoot_timer: 2.,
         defences: init_defences(),
@@ -57,6 +59,9 @@ pub fn draw_game(g: &mut Game) {
     draw_defences(&g.defences);
 
     for (_, b) in &g.player.weapon.bullets {
+        b.draw_bullet();
+    }
+    for (_, b) in &g.enemy_bullets {
         b.draw_bullet();
     }
 }

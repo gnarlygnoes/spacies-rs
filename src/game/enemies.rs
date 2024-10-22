@@ -1,14 +1,19 @@
+use std::collections::HashMap;
+
 use ::rand::Rng;
 
 use macroquad::{
     color::{Color, GREEN, RED},
     math::{Circle, Rect},
-    shapes::{draw_circle, draw_rectangle},
+    shapes::draw_rectangle,
 };
 
 use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
 
-use super::{game_loop::Game, weapon::Bullet};
+use super::{
+    game_loop::Game,
+    weapon::{delete_bullets, Bullet},
+};
 
 #[derive(Clone, Copy)]
 pub struct Enemy {
@@ -16,8 +21,6 @@ pub struct Enemy {
     pub colour: Color,
     pub alive: bool,
     can_shoot: bool,
-    pub bullet: Bullet,
-    // bullet_id: u32,
 }
 impl Default for Enemy {
     fn default() -> Self {
@@ -31,24 +34,12 @@ impl Default for Enemy {
             colour: RED,
             alive: true,
             can_shoot: false,
-            bullet: Bullet {
-                ..Default::default()
-            },
-            // bullet_id: 0,
         }
     }
 }
 impl Enemy {
     pub fn draw_enemy(&self) {
         draw_rectangle(self.rec.x, self.rec.y, self.rec.w, self.rec.h, self.colour);
-        if self.bullet.active {
-            draw_circle(
-                self.bullet.circle.x,
-                self.bullet.circle.y,
-                self.bullet.circle.r,
-                self.colour,
-            );
-        }
     }
 }
 impl Game {
@@ -75,9 +66,7 @@ impl Game {
     fn move_enemies(&mut self) {
         for row in &mut self.enemies {
             for e in row {
-                // if !self.enemy_drop_proc {
                 e.rec.x += 40. * self.enemy_direction;
-                // }
                 if self.enemy_drop_proc {
                     e.rec.y += 40.;
                 }
@@ -126,49 +115,48 @@ impl Game {
     }
 
     fn shoot(&mut self) {
-        // for row in self.enemies {
-        //     for e in row {
-        //         if e.can_shoot {}
-        //     }
-        // }
-        // let e_iter = self.enemies.iter();
-        //
         let mut rng = ::rand::thread_rng();
 
         let random_number: usize = rng.gen_range(0..10);
 
         for i in 0..self.enemies.len() {
-            // for j in 0..self.enemies[i].len() {
             if self.enemies[i][random_number].can_shoot {
-                // println!("Enemy {random_number} attacks.");
-
-                self.enemies[i][random_number].bullet = Bullet {
-                    colour: GREEN,
-                    circle: Circle {
-                        x: self.enemies[i][random_number].rec.x
-                            + self.enemies[i][random_number].rec.w
-                            + 5.,
-                        y: self.enemies[i][random_number].rec.y
-                            + self.enemies[i][random_number].rec.h,
-                        r: 5.,
+                // self.enemies[i][random_number].bullet =
+                self.enemy_bullets.insert(
+                    self.e_bullet_id,
+                    Bullet {
+                        colour: GREEN,
+                        circle: Circle {
+                            x: self.enemies[i][random_number].rec.x
+                                + self.enemies[i][random_number].rec.w
+                                + 5.,
+                            y: self.enemies[i][random_number].rec.y
+                                + self.enemies[i][random_number].rec.h,
+                            r: 5.,
+                        },
+                        active: true,
                     },
-                    active: true,
-                }
+                );
+                self.e_bullet_id += 1;
             }
-            // }
         }
     }
     fn update_enemy_bullets(&mut self, dt: f32) {
-        for row in &mut self.enemies {
-            for e in row {
-                if e.bullet.active {
-                    e.bullet.circle.y += 100. * dt;
-                    if e.bullet.circle.y > WINDOW_HEIGHT {
-                        e.bullet.active = false;
-                    }
+        for (_, b) in &mut self.enemy_bullets {
+            if b.active {
+                b.circle.y += 100. * dt;
+                if b.circle.y > WINDOW_HEIGHT {
+                    b.active = false;
                 }
             }
         }
+        let mut inactive: Vec<u32> = vec![];
+        for (id, b) in &self.enemy_bullets {
+            if !b.active {
+                inactive.push(*id);
+            }
+        }
+        self.enemy_bullets = delete_bullets(self.enemy_bullets.clone(), inactive);
     }
 }
 

@@ -30,25 +30,26 @@ pub fn update_collision(game: &mut Game) {
                     }
                 }
             }
+        }
+    }
+    for (_, b) in &mut game.enemy_bullets {
+        // enemy bullets collision
+        if b.active {
+            let bullet_rec = Rect {
+                x: b.circle.x,
+                y: b.circle.y,
+                w: b.circle.r,
+                h: b.circle.r,
+            };
 
-            // enemy bullets collision
-            if e.bullet.active {
-                let bullet_rec = Rect {
-                    x: e.bullet.circle.x,
-                    y: e.bullet.circle.y,
-                    w: e.bullet.circle.r,
-                    h: e.bullet.circle.r,
-                };
+            if check_collision(game.player.rec, bullet_rec) {
+                b.active = false;
+                println!("OWW! FUCCKKKK!");
+            }
 
-                if check_collision(game.player.rec, bullet_rec) {
-                    e.bullet = Default::default();
-                    println!("OWW! FUCCKKKK!");
-                }
-
-                for (_, d) in &game.defences {
-                    if check_collision(d.rec, bullet_rec) {
-                        e.bullet.active = false;
-                    }
+            for (_, d) in &game.defences {
+                if check_collision(d.rec, bullet_rec) {
+                    b.active = false;
                 }
             }
         }
