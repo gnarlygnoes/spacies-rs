@@ -1,10 +1,11 @@
 use std::collections::HashMap;
 
 use macroquad::{
-    color::Color,
+    color::{Color, ORANGE, WHITE},
     input::{is_key_down, KeyCode},
     math::{Circle, Rect, Vec2},
     shapes::draw_rectangle,
+    texture::{draw_texture, draw_texture_ex, Texture2D},
 };
 
 use crate::WINDOW_WIDTH;
@@ -13,12 +14,14 @@ use super::weapon::Weapon;
 
 pub struct Player {
     pub rec: Rect,
+    // pub tex: Texture
     pub colour: Color,
     pub weapon: Weapon,
 }
 impl Player {
     pub fn draw(&self) {
         draw_rectangle(self.rec.x, self.rec.y, self.rec.w, self.rec.h, self.colour);
+        // draw_texture(&tex, self.rec.x, self.rec.y, WHITE);
     }
 
     pub fn move_player(&mut self, direction: i8, delta_time: f32) {
@@ -40,14 +43,14 @@ impl Player {
     }
 }
 
-pub fn create_player(colour: Color) -> Player {
+pub fn create_player() -> Player {
     let x = (crate::WINDOW_WIDTH) / 2. - 25.;
     let y = (crate::WINDOW_HEIGHT) - 100.;
     let w = 50.;
     let h = 80.;
     return Player {
         rec: Rect { x, y, w, h },
-        colour,
+        colour: ORANGE,
         weapon: Weapon {
             pos: Vec2 { x: x + w / 2., y },
             weapon_lock: false,

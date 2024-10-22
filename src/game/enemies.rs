@@ -1,12 +1,17 @@
+use std::collections::HashMap;
+
+use ::rand::Rng;
+
 use macroquad::{
-    color::{Color, GREEN, RED},
-    math::Rect,
-    shapes::draw_rectangle,
+    color::{Color, GREEN, RED, WHITE},
+    math::{Circle, Rect},
+    rand::gen_range,
+    shapes::{draw_circle, draw_rectangle},
 };
 
 use crate::WINDOW_WIDTH;
 
-use super::game_loop::Game;
+use super::{game_loop::Game, weapon::Bullet};
 
 #[derive(Clone, Copy)]
 pub struct Enemy {
@@ -14,6 +19,8 @@ pub struct Enemy {
     pub colour: Color,
     pub alive: bool,
     can_shoot: bool,
+    bullet: Bullet,
+    // bullet_id: u32,
 }
 impl Default for Enemy {
     fn default() -> Self {
@@ -27,6 +34,10 @@ impl Default for Enemy {
             colour: RED,
             alive: true,
             can_shoot: false,
+            bullet: Bullet {
+                ..Default::default()
+            },
+            // bullet_id: 0,
         }
     }
 }
@@ -38,14 +49,22 @@ impl Enemy {
 impl Game {
     pub fn update_enemies(&mut self, dt: f32) {
         self.who_can_shoot();
+        self.move_time += dt;
+        self.cur_shoot_time += dt;
 
-        self.event_time += dt;
-
-        if self.event_time > self.game_speed {
+        if self.move_time > self.game_speed {
             self.move_enemies();
 
-            self.event_time = 0.
+            self.move_time = 0.
         }
+        if self.cur_shoot_time > self.enemy_shoot_timer {
+            self.shoot();
+
+            self.cur_shoot_time = 0.;
+
+            self.enemy_shoot_timer = ::rand::thread_rng().gen_range(1.5..3.0)
+        }
+        self.update_enemy_bullets(dt);
     }
 
     fn move_enemies(&mut self) {
@@ -96,6 +115,63 @@ impl Game {
                     if !self.enemies[r - k][j].alive {
                         self.enemies[r - k][j].can_shoot = false;
                     }
+                }
+            }
+        }
+    }
+
+    fn shoot(&mut self) {
+        // for row in self.enemies {
+        //     for e in row {
+        //         if e.can_shoot {}
+        //     }
+        // }
+        // let e_iter = self.enemies.iter();
+        //
+        let mut rng = ::rand::thread_rng();
+
+        let random_number: usize = rng.gen_range(0..10);
+
+        for i in 0..self.enemies.len() {
+            // for j in 0..self.enemies[i].len() {
+            if self.enemies[i][random_number].can_shoot {
+                // println!("Enemy {random_number} attacks.");
+
+                self.enemies[i][random_number].bullet = Bullet {
+                    colour: GREEN,
+                    circle: Circle {
+                        x: self.enemies[i][random_number].rec.x
+                            + self.enemies[i][random_number].rec.w
+                            + 5.,
+                        y: self.enemies[i][random_number].rec.y
+                            + self.enemies[i][random_number].rec.h,
+                        r: 5.,
+                    },
+                    active: true,
+                }
+            }
+            // }
+        }
+    }
+    fn update_enemy_bullets(&mut self, dt: f32) {
+        for row in &mut self.enemies {
+            for e in row {
+                if e.bullet.active {
+                    e.bullet.circle.y += 1000. * dt;
+                }
+            }
+        }
+    }
+    pub fn draw_enemy_bullets(&self) {
+        for row in &self.enemies {
+            for e in row {
+                if e.bullet.active {
+                    draw_circle(
+                        e.bullet.circle.x,
+                        e.bullet.circle.y,
+                        e.bullet.circle.r,
+                        e.bullet.colour,
+                    );
                 }
             }
         }

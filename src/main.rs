@@ -14,8 +14,13 @@ fn window_conf() -> Conf {
     }
 }
 
+// fn load_the_damn_textures() {}
+//
 #[macroquad::main(window_conf)]
 async fn main() {
+    // let tileset: Texture2D = load_texture("assets/SpaceInvaders.png").await.unwrap();
+    // tileset.set_filter(FilterMode::Nearest);
+
     let mut game = init_game();
 
     loop {

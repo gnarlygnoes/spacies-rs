@@ -79,7 +79,7 @@ impl Weapon {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct Bullet {
     pub colour: Color,
     pub circle: Circle,
