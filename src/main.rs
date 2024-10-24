@@ -1,4 +1,9 @@
-use game::game_loop::{draw_game, init_game, update_game};
+use game::{
+    game_loop::{draw_game, init_game, update_game, GameState},
+    main_menu::{draw_menu, game_paused, update_menu},
+    settings::handle_inputs,
+    victory_defeat::{defeat_mode, draw_defeat, draw_victory, victory_mode},
+};
 use macroquad::prelude::*;
 pub mod game;
 
@@ -27,12 +32,35 @@ async fn main() {
         let dt = get_frame_time();
 
         // update stuff
-        update_game(&mut game, dt);
 
         // draw stuff
         clear_background(BLACK);
 
-        draw_game(&mut game);
+        // if game.game_state == GameState::InGame {
+        handle_inputs(&mut game);
+        match game.game_state {
+            GameState::Menu => {
+                update_menu(&mut game);
+                draw_menu();
+            }
+            GameState::InGame => {
+                update_game(&mut game, dt);
+                draw_game(&game);
+            }
+            GameState::Paused => {
+                draw_game(&game);
+                game_paused();
+            }
+            GameState::Victorious => {
+                victory_mode(&mut game);
+                draw_victory(&game);
+            }
+            GameState::Defeated => {
+                defeat_mode(&mut game);
+                draw_defeat();
+            }
+        }
+        // }
 
         let fps = get_fps();
         draw_text(format!("{fps}").as_str(), 20., 50., 36., ORANGE);

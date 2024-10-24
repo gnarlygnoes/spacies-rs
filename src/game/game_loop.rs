@@ -13,6 +13,8 @@ use super::{
 };
 
 pub struct Game {
+    pub game_state: GameState,
+
     // pub game_texture: Texture2D,
     pub player: Player,
     pub enemies: [[Enemy; 10]; 5],
@@ -26,13 +28,22 @@ pub struct Game {
     pub enemy_bullets: HashMap<u32, Bullet>,
     pub e_bullet_id: u32,
     pub defences: HashMap<u8, Defence>,
-
     pub player_score: i32,
     pub speed: u8,
 }
 
+pub enum GameState {
+    Menu,
+    Paused,
+    InGame,
+    Victorious,
+    Defeated,
+}
+
 pub fn init_game() -> Game {
     Game {
+        game_state: GameState::Menu,
+
         // game_texture,
         player: Player::create_player(),
         enemies: create_enemies(),
@@ -46,7 +57,6 @@ pub fn init_game() -> Game {
         cur_shoot_time: 0.,
         enemy_shoot_timer: 2.,
         defences: init_defences(),
-
         player_score: 0,
         speed: 1,
     }
@@ -119,9 +129,17 @@ pub fn update_game(g: &mut Game, dt: f32) {
     g.update_enemies(dt);
     update_collision(g);
     check_speed(g);
+
+    if g.player_score >= 5000 {
+        g.game_state = GameState::Victorious;
+        // *g = init_game();
+    }
+    if g.player.health <= 0 {
+        g.game_state = GameState::Defeated;
+    }
 }
 
-pub fn draw_game(g: &mut Game) {
+pub fn draw_game(g: &Game) {
     if g.player.weapon.muzzle_active {
         g.player.weapon.draw_muzzle();
     }
