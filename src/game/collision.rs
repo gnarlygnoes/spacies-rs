@@ -26,7 +26,7 @@ pub fn update_collision(game: &mut Game) {
 
                     if check_collision(bullet_rec, e.rec) {
                         b.active = false;
-                        e.alive = false;
+                        e.health -= 1;
                     }
                 }
             }

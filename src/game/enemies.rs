@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use ::rand::Rng;
 
 use macroquad::{
@@ -11,7 +9,7 @@ use macroquad::{
 use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
 
 use super::{
-    game_loop::Game,
+    game_loop::{set_player_score, Game},
     weapon::{delete_bullets, Bullet},
 };
 
@@ -21,6 +19,7 @@ pub struct Enemy {
     pub colour: Color,
     pub alive: bool,
     can_shoot: bool,
+    pub health: u8,
 }
 impl Default for Enemy {
     fn default() -> Self {
@@ -34,6 +33,7 @@ impl Default for Enemy {
             colour: RED,
             alive: true,
             can_shoot: false,
+            health: 1,
         }
     }
 }
@@ -60,6 +60,16 @@ impl Game {
 
             self.enemy_shoot_timer = ::rand::thread_rng().gen_range(1.5..3.0)
         }
+
+        for i in 0..self.enemies.len() {
+            for j in 0..self.enemies[i].len() {
+                if self.enemies[i][j].health <= 0 {
+                    self.enemies[i][j].alive = false;
+                    self.player_score = set_player_score(self);
+                }
+            }
+        }
+
         self.update_enemy_bullets(dt);
     }
 
@@ -115,10 +125,23 @@ impl Game {
     }
 
     fn shoot(&mut self) {
+        let num_can_shoot: usize = 10;
         let mut rng = ::rand::thread_rng();
 
-        let random_number: usize = rng.gen_range(0..10);
-
+        // for row in self.enemies {
+        //     for e in row {
+        //         if e.can_shoot {
+        //             num_can_shoot += 1;
+        //         }
+        //     }
+        // }
+        // println!("{num_can_shoot}");
+        let mut random_number: usize = rng.gen_range(0..num_can_shoot);
+        if self.player_score < 5000 {
+            while !self.enemies[0][random_number].alive {
+                random_number = rng.gen_range(0..num_can_shoot);
+            }
+        }
         for i in 0..self.enemies.len() {
             if self.enemies[i][random_number].can_shoot {
                 // self.enemies[i][random_number].bullet =
@@ -128,8 +151,8 @@ impl Game {
                         colour: GREEN,
                         circle: Circle {
                             x: self.enemies[i][random_number].rec.x
-                                + self.enemies[i][random_number].rec.w
-                                + 5.,
+                                + self.enemies[i][random_number].rec.w / 2.
+                                - 2.5,
                             y: self.enemies[i][random_number].rec.y
                                 + self.enemies[i][random_number].rec.h,
                             r: 5.,
@@ -144,7 +167,7 @@ impl Game {
     fn update_enemy_bullets(&mut self, dt: f32) {
         for (_, b) in &mut self.enemy_bullets {
             if b.active {
-                b.circle.y += 100. * dt;
+                b.circle.y += 1500. * dt;
                 if b.circle.y > WINDOW_HEIGHT {
                     b.active = false;
                 }
@@ -173,11 +196,60 @@ pub fn create_enemies() -> [[Enemy; 10]; 5] {
                 y: (1.5 * i as f32 * h) + 10.,
                 w,
                 h,
+            };
+            if i < 3 {
+                enemies[i][j].health = 2
             }
+            if i < 1 {
+                enemies[i][j].health = 3
+            }
+            // enemies[i][j].health = 5 - i as u8;
         }
     }
     return enemies;
 }
+
+// pub fn create_enemies2() -> HashMap<[[u8; 10]; 5], Enemy> {
+//     let w = 50.;
+//     let h = 50.;
+
+//     let mut iterator = [[0u8; 10]; 5];
+//     // let mut i: usize = 0;
+//     let mut enemies: HashMap<[[u8; 10]; 5], Enemy> = HashMap::new();
+//     for i in 0..iterator.len() {
+//         for j in 0..iterator[i].len() {
+//             iterator[i][j] = j as u8;
+
+//             // println!("{} {}", i, j);
+//             // println!("{}", iterator[2][3]);
+//         }
+//     }
+//     enemies.insert(
+//         iterator,
+//         Enemy::default(),
+//         // {
+//         // rec: Rect {
+//         //     x: (1.5 * j as f32 * w) + 10.,
+//         //     y: (1.5 * i as f32 * h) + 10.,
+//         //     w,
+//         //     h,
+//         // },
+//         // alive: true,
+//         //     ..Default::default()
+//         // },
+//     );
+//     for i in 0..iterator.len() {
+//         for j in 0..iterator[i].len() {
+//             for (id, e) in &mut enemies {
+//                 e.alive = true;
+//                 e.rec.x = (1.5 * j as f32 * w) + 10.;
+//                 e.rec.y = (1.5 * i as f32 * h) + 10.;
+//             }
+//         }
+//     }
+
+//     enemies
+// }
 
 pub fn draw_enemes(enemies: [[Enemy; 10]; 5]) {
     for row in enemies {
