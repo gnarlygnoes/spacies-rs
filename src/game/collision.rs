@@ -48,16 +48,17 @@ pub fn update_collision(game: &mut Game) {
                 println!("OWW! FUCCKKKK!");
             }
 
-            for (_, d) in &game.defences {
+            for (_, d) in &mut game.defences {
                 if check_collision(d.rec, bullet_rec) {
                     b.active = false;
+                    d.health -= 1;
                 }
             }
         }
     }
 
     for (_, b) in &mut game.player.weapon.bullets {
-        for (_, d) in &game.defences {
+        for (_, d) in &mut game.defences {
             let bullet_rec = Rect {
                 x: b.circle.x,
                 y: b.circle.y,
@@ -67,6 +68,7 @@ pub fn update_collision(game: &mut Game) {
 
             if check_collision(bullet_rec, d.rec) {
                 b.active = false;
+                d.health -= 1;
             }
         }
     }

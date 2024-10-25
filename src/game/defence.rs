@@ -8,6 +8,8 @@ use macroquad::{
 
 use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
 
+use super::game_loop::Game;
+
 pub struct Defence {
     pub rec: Rect,
     pub colour: Color,
@@ -23,7 +25,7 @@ impl Default for Defence {
                 h: 100.,
             },
             colour: GRAY,
-            health: 20,
+            health: 10,
         }
     }
 }
@@ -47,6 +49,19 @@ pub fn init_defences() -> HashMap<u8, Defence> {
         );
     }
     defences
+}
+
+pub fn update_defences(g: &mut Game) {
+    let mut iterator: Vec<u8> = vec![];
+    for (id, d) in &mut g.defences {
+        if d.health <= 0 {
+            // g.defences.remove(id);
+            iterator.push(*id);
+        }
+    }
+    for id in iterator {
+        g.defences.remove(&id);
+    }
 }
 
 pub fn draw_defences(defences: &HashMap<u8, Defence>) {

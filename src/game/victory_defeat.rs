@@ -1,5 +1,5 @@
 use macroquad::{
-    color::WHITE,
+    color::{GREEN, RED, WHITE},
     input::{is_key_pressed, KeyCode},
     text::draw_text,
 };
@@ -14,21 +14,27 @@ pub fn victory_mode(g: &mut Game) {
 }
 
 pub fn draw_victory(g: &Game) {
+    draw_text("You won! Well done!", 50., 500., 36., GREEN);
     draw_text(
-        "You won! Well done! \n
-        Spend your hard-earned points to unlock new stuff, or to repair your shooter.\n
-        Or hit enter to go to the next round.",
+        "Spend your hard-earned points to unlock new stuff, or to repair your shooter.",
         50.,
-        500.,
+        550.,
         36.,
-        WHITE,
+        GREEN,
+    );
+    draw_text(
+        "Or hit enter to go to the next round.",
+        50.,
+        600.,
+        36.,
+        GREEN,
     );
     draw_text(
         format!("Final Score: {}", g.player_score).as_str(),
         50.,
         700.,
         36.,
-        WHITE,
+        GREEN,
     );
 }
 
@@ -40,14 +46,20 @@ pub fn defeat_mode(g: &mut Game) {
 }
 
 pub fn draw_defeat() {
-    draw_text("You have been defecated.", 50., 500., 48., WHITE);
+    draw_text("You have been defecated.", 50., 500., 48., RED);
+    draw_text("Your planet has been over-run,", 50., 550., 36., RED);
     draw_text(
-        "Your planet has been over-run,
-        but at least you are not alive to experience
-        the suffering that your defeat has caused others",
+        "but at least you are not alive to experience",
         50.,
         600.,
         36.,
-        WHITE,
+        RED,
+    );
+    draw_text(
+        "the suffering that your defeat has caused others",
+        50.,
+        650.,
+        36.,
+        RED,
     );
 }

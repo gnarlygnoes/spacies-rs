@@ -6,7 +6,7 @@ use crate::{WINDOW_HEIGHT, WINDOW_WIDTH};
 
 use super::{
     collision::update_collision,
-    defence::{draw_defences, init_defences, Defence},
+    defence::{draw_defences, init_defences, update_defences, Defence},
     enemies::{create_enemies, draw_enemes, Enemy},
     player::{update_player, Player},
     weapon::Bullet,
@@ -128,6 +128,7 @@ pub fn update_game(g: &mut Game, dt: f32) {
     update_player(&mut g.player, dt);
     g.update_enemies(dt);
     update_collision(g);
+    update_defences(g);
     check_speed(g);
 
     if g.player_score >= 5000 {
@@ -161,8 +162,8 @@ pub fn draw_game(g: &Game) {
         WHITE,
     );
     draw_text(
-        format!("Speed: {}", g.speed).as_str(),
-        WINDOW_WIDTH - 140.,
+        format!("Health: {}", g.player.health).as_str(),
+        WINDOW_WIDTH - 160.,
         WINDOW_HEIGHT - 50.,
         36.,
         WHITE,
