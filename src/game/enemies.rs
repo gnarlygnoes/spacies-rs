@@ -48,12 +48,12 @@ impl Game {
         self.move_time += dt;
         self.cur_shoot_time += dt;
 
-        if self.move_time > self.game_speed {
+        if self.move_time > self.game_speed * 0.8 {
             self.move_enemies();
 
             self.move_time = 0.
         }
-        if self.cur_shoot_time > self.enemy_shoot_timer {
+        if self.cur_shoot_time > self.enemy_shoot_timer * 0.9 {
             self.shoot();
 
             self.cur_shoot_time = 0.;

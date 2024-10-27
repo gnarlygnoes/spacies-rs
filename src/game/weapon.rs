@@ -31,7 +31,7 @@ impl Weapon {
             }
             self.cur_time += dt;
         }
-        if self.cur_time > self.reload_time / 1.2 && self.weapon_lock {
+        if self.cur_time > self.reload_time / 1. && self.weapon_lock {
             let r = 5.;
             self.bullets.insert(
                 self.bullet_id,
@@ -103,7 +103,7 @@ impl Default for Bullet {
 }
 impl Bullet {
     fn update_bullet(&mut self, dt: f32) {
-        self.circle.y -= 2000. * dt;
+        self.circle.y -= 2500. * dt;
     }
 
     pub fn draw_bullet(&self) {
