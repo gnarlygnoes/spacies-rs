@@ -4,7 +4,7 @@ use macroquad::{
     text::draw_text,
 };
 
-use super::game_loop::{init_game, Game, GameState};
+use super::game_loop::{Game, GameState};
 
 pub fn update_menu(g: &mut Game) {
     if is_key_pressed(KeyCode::Enter) {

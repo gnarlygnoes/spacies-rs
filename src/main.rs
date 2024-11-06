@@ -1,5 +1,6 @@
+//use game::game_loop::init_game;
 use game::{
-    game_loop::{draw_game, init_game, update_game, GameState},
+    game_loop::{draw_game, update_game, Game, GameState},
     main_menu::{draw_menu, game_paused, update_menu},
     settings::handle_inputs,
     victory_defeat::{defeat_mode, draw_defeat, draw_victory, victory_mode},
@@ -26,7 +27,8 @@ async fn main() {
     // let tileset: Texture2D = load_texture("assets/SpaceInvaders.png").await.unwrap();
     // tileset.set_filter(FilterMode::Nearest);
 
-    let mut game = init_game();
+    // let mut game: Game;
+    let mut game = Game::init_game();
 
     loop {
         let dt = get_frame_time();

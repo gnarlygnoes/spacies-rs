@@ -8,7 +8,7 @@ use super::{
     collision::update_collision,
     defence::{draw_defences, init_defences, update_defences, Defence},
     enemies::{create_enemies, draw_enemes, Enemy},
-    player::{update_player, Player},
+    player::Player,
     weapon::Bullet,
 };
 
@@ -31,7 +31,29 @@ pub struct Game {
     pub player_score: i32,
     pub speed: u8,
 }
+impl Game {
+    pub fn init_game() -> Self {
+        Self {
+            game_state: GameState::Menu,
 
+            // game_texture,
+            player: Player::create_player(),
+            enemies: create_enemies(),
+            // enemies2: create_enemies2(),
+            move_time: 0.,
+            game_speed: 1.,
+            enemy_direction: 1.,
+            enemy_drop_proc: false,
+            enemy_bullets: HashMap::new(),
+            e_bullet_id: 0,
+            cur_shoot_time: 0.,
+            enemy_shoot_timer: 2.,
+            defences: init_defences(),
+            player_score: 0,
+            speed: 1,
+        }
+    }
+}
 pub enum GameState {
     Menu,
     Paused,
@@ -40,33 +62,11 @@ pub enum GameState {
     Defeated,
 }
 
-pub fn init_game() -> Game {
-    Game {
-        game_state: GameState::Menu,
-
-        // game_texture,
-        player: Player::create_player(),
-        enemies: create_enemies(),
-        // enemies2: create_enemies2(),
-        move_time: 0.,
-        game_speed: 1.,
-        enemy_direction: 1.,
-        enemy_drop_proc: false,
-        enemy_bullets: HashMap::new(),
-        e_bullet_id: 0,
-        cur_shoot_time: 0.,
-        enemy_shoot_timer: 2.,
-        defences: init_defences(),
-        player_score: 0,
-        speed: 1,
-    }
-}
-
 // pub fn save_game() {}
 // pub fn load_game() {}
 
 fn check_speed(g: &mut Game) {
-    match (g.player_score) {
+    match g.player_score {
         0..1000 => g.speed = 1,
         1000..2000 => g.speed = 2,
         2000..3000 => g.speed = 3,
@@ -76,7 +76,7 @@ fn check_speed(g: &mut Game) {
         _ => g.speed = 7,
     }
 
-    match (g.speed) {
+    match g.speed {
         1 => {
             g.game_speed = 1.5;
             g.enemy_shoot_timer = 2.
@@ -125,7 +125,7 @@ pub fn set_player_score(g: &mut Game) -> i32 {
 }
 
 pub fn update_game(g: &mut Game, dt: f32) {
-    update_player(&mut g.player, dt);
+    g.player.update_player(dt);
     g.update_enemies(dt);
     update_collision(g);
     update_defences(g);

@@ -128,14 +128,6 @@ impl Game {
         let num_can_shoot: usize = 10;
         let mut rng = ::rand::thread_rng();
 
-        // for row in self.enemies {
-        //     for e in row {
-        //         if e.can_shoot {
-        //             num_can_shoot += 1;
-        //         }
-        //     }
-        // }
-        // println!("{num_can_shoot}");
         let mut random_number: usize = rng.gen_range(0..num_can_shoot);
         if self.player_score < 5000 {
             while !self.enemies[0][random_number].alive {
@@ -198,58 +190,16 @@ pub fn create_enemies() -> [[Enemy; 10]; 5] {
                 h,
             };
             if i < 3 {
-                enemies[i][j].health = 2
+                enemies[i][j].health = 1
             }
             if i < 1 {
-                enemies[i][j].health = 3
+                enemies[i][j].health = 2
             }
             // enemies[i][j].health = 5 - i as u8;
         }
     }
     return enemies;
 }
-
-// pub fn create_enemies2() -> HashMap<[[u8; 10]; 5], Enemy> {
-//     let w = 50.;
-//     let h = 50.;
-
-//     let mut iterator = [[0u8; 10]; 5];
-//     // let mut i: usize = 0;
-//     let mut enemies: HashMap<[[u8; 10]; 5], Enemy> = HashMap::new();
-//     for i in 0..iterator.len() {
-//         for j in 0..iterator[i].len() {
-//             iterator[i][j] = j as u8;
-
-//             // println!("{} {}", i, j);
-//             // println!("{}", iterator[2][3]);
-//         }
-//     }
-//     enemies.insert(
-//         iterator,
-//         Enemy::default(),
-//         // {
-//         // rec: Rect {
-//         //     x: (1.5 * j as f32 * w) + 10.,
-//         //     y: (1.5 * i as f32 * h) + 10.,
-//         //     w,
-//         //     h,
-//         // },
-//         // alive: true,
-//         //     ..Default::default()
-//         // },
-//     );
-//     for i in 0..iterator.len() {
-//         for j in 0..iterator[i].len() {
-//             for (id, e) in &mut enemies {
-//                 e.alive = true;
-//                 e.rec.x = (1.5 * j as f32 * w) + 10.;
-//                 e.rec.y = (1.5 * i as f32 * h) + 10.;
-//             }
-//         }
-//     }
-
-//     enemies
-// }
 
 pub fn draw_enemes(enemies: [[Enemy; 10]; 5]) {
     for row in enemies {

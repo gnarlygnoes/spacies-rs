@@ -48,6 +48,17 @@ impl Player {
         };
     }
 
+    pub fn update_player(&mut self, dt: f32) {
+        if is_key_down(KeyCode::Left) {
+            self.move_player(-1, dt);
+        }
+        if is_key_down(KeyCode::Right) {
+            self.move_player(1, dt);
+        }
+
+        self.weapon.update_weapon(dt);
+    }
+
     pub fn draw(&self) {
         draw_rectangle(self.rec.x, self.rec.y, self.rec.w, self.rec.h, self.colour);
         // draw_texture(&tex, self.rec.x, self.rec.y, WHITE);
@@ -72,7 +83,7 @@ impl Player {
     }
 }
 
-pub fn update_player(p: &mut Player, dt: f32) {
+/* pub fn update_player(p: &mut Player, dt: f32) {
     if is_key_down(KeyCode::Left) {
         p.move_player(-1, dt);
     }
@@ -81,4 +92,4 @@ pub fn update_player(p: &mut Player, dt: f32) {
     }
 
     p.weapon.update_weapon(dt);
-}
+} */

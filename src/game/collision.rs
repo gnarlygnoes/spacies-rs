@@ -45,7 +45,7 @@ pub fn update_collision(game: &mut Game) {
             if check_collision(game.player.rec, bullet_rec) {
                 b.active = false;
                 game.player.health -= 1;
-                println!("OWW! FUCCKKKK!");
+                // println!("OWW! FUCCKKKK!");
             }
 
             for (_, d) in &mut game.defences {
