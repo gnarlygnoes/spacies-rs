@@ -18,4 +18,5 @@ pub fn draw_menu() {
 
 pub fn game_paused() {
     draw_text("The bloody game's been paused!", 50., 500., 36., WHITE);
+    draw_text("Press P to unpause it.", 50., 600., 36., WHITE);
 }

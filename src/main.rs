@@ -50,7 +50,7 @@ async fn main() {
                 draw_game(&game);
             }
             GameState::Paused => {
-                draw_game(&game);
+                //draw_game(&game);
                 game_paused();
             }
             GameState::Victorious => {
