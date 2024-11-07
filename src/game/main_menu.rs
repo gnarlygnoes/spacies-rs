@@ -13,7 +13,7 @@ pub fn update_menu(g: &mut Game) {
 }
 
 pub fn draw_menu() {
-    draw_text("Hit enter to start the bloody game!", 50., 500., 36., WHITE);
+    draw_text("Hit enter to start the game!", 50., 500., 36., WHITE);
 }
 
 pub fn game_paused() {
